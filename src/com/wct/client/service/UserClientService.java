@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.List;
 
 /**
  * @author WenCT
@@ -18,6 +19,11 @@ import java.net.Socket;
 public class UserClientService {
     private User u = new User();
     private Socket socket;
+
+    public User getU() {
+        return u;
+    }
+
     public boolean checkUser(String userId , String pwd){
         boolean b = false;
         u.setUid(userId);
@@ -34,7 +40,7 @@ public class UserClientService {
 
             if(ms.getMessageType().equals(MessageType.MESSAGE_LOGIN_SUCCEED)){ //登录成功
                 //创建一个线程和服务端连接
-                System.out.println("");
+                System.out.println("用户"+ userId + "登录成功");
                 ClientConnectServerThread clientConnectServerThread = new ClientConnectServerThread(socket);
                 //启动客户端线程
                 clientConnectServerThread.start();
@@ -42,11 +48,32 @@ public class UserClientService {
                 ManageClientConnectServerThread.addClientConnectServerThread(userId,clientConnectServerThread);
                 b = true;
             } else{
-               socket.close();
+                System.out.println("用户" + userId + "登录失败");
+                socket.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return  b;
+    }
+    //拉取在线用户列表
+    public void onlineUserList(){
+        //获取用户通信线程
+        ClientConnectServerThread clientConnectServerThread =
+                ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
+        //获取socket
+        Socket socket = clientConnectServerThread.getSocket();
+        Message ms = new Message();
+        ms.setMessageType(MessageType.MESSAGE_GET_ONLINE_USER);
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(ms);
+
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            Message message = (Message) ois.readObject();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
