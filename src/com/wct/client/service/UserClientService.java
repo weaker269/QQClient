@@ -58,19 +58,19 @@ public class UserClientService {
     }
     //拉取在线用户列表
     public void onlineUserList(){
-        //获取用户通信线程
-        ClientConnectServerThread clientConnectServerThread =
-                ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
-        //获取socket
-        Socket socket = clientConnectServerThread.getSocket();
         Message ms = new Message();
         ms.setMessageType(MessageType.MESSAGE_GET_ONLINE_USER);
+        ms.setSender(u.getUid());
         try {
+            //获取用户通信线程
+            ClientConnectServerThread clientConnectServerThread =
+                    ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
+            //获取socket
+            Socket socket = clientConnectServerThread.getSocket();
+
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeObject(ms);
 
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            Message message = (Message) ois.readObject();
 
         } catch (Exception e) {
             e.printStackTrace();

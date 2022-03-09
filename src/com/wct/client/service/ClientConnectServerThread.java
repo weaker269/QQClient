@@ -31,8 +31,9 @@ public class ClientConnectServerThread extends Thread{
                 Message message = (Message)ois.readObject();
                 if(message.getMessageType().equals(MessageType.MESSAGE_RET_ONLINE_USER)){
                     String[] sp = message.getContent().split(" ");
+                    System.out.println("=========当前在线用户列表========");
                     for(String str : sp){
-                        System.out.println(str);
+                        System.out.println("用户:  " + str);
                     }
                 }else{
 
