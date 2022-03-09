@@ -19,6 +19,7 @@ public class UserClientService {
     private User u = new User();
     private Socket socket;
     public boolean checkUser(String userId , String pwd){
+        boolean b = false;
         u.setUid(userId);
         u.setPassword(pwd);
         //连接到服务器端
@@ -34,13 +35,18 @@ public class UserClientService {
             if(ms.getMessageType().equals(MessageType.MESSAGE_LOGIN_SUCCEED)){ //登录成功
                 //创建一个线程和服务端连接
                 System.out.println("");
-
-
+                ClientConnectServerThread clientConnectServerThread = new ClientConnectServerThread(socket);
+                //启动客户端线程
+                clientConnectServerThread.start();
+                //将线程加入到一个集合中
+                ManageClientConnectServerThread.addClientConnectServerThread(userId,clientConnectServerThread);
+                b = true;
             } else{
-
+               socket.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return  b;
     }
 }

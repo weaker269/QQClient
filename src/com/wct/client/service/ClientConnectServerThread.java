@@ -8,6 +8,7 @@ import java.net.Socket;
 
 /**
  * @author WenCT
+ * 该类为客户端线程类
  */
 public class ClientConnectServerThread extends Thread{
     private Socket socket;

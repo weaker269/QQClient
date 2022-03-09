@@ -1,5 +1,7 @@
 package com.wct.client.QQView;
 
+import com.wct.client.service.UserClientService;
+
 import java.util.Scanner;
 
 /**
@@ -12,6 +14,7 @@ public class View {
     }
     private boolean loop = true;
     private String opt;
+    private UserClientService userClientService = new UserClientService();
     public void mainView(){
         Scanner scanner = new Scanner(System.in);
         while(loop){
@@ -25,7 +28,7 @@ public class View {
                     String uid = scanner.next();
                     System.out.println("请输入密码: ");
                     String password = scanner.next();
-                    if(true){
+                    if(userClientService.checkUser(uid,password)){
                         System.out.println("\n==============欢迎用户" + uid + "================");
                         System.out.println("\t\t 1.显示在线用户列表");
                         System.out.println("\t\t 2.群发消息");
