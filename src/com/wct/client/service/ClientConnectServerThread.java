@@ -35,7 +35,14 @@ public class ClientConnectServerThread extends Thread{
                     for(String str : sp){
                         System.out.println("用户:  " + str);
                     }
-                }else{
+                }
+                else if(message.getMessageType().equals(MessageType.MESSAGE_CLIENT_EXIT_SUCCESS)){
+                    System.out.println(message.getReceiver() + " 成功退出客户端");
+                    ManageClientConnectServerThread.removeClientConnectServerThread(message.getReceiver());
+                    socket.close();
+                    break;
+                }
+                else{
 
                 }
             } catch (Exception e) {

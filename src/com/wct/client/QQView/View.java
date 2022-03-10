@@ -14,6 +14,7 @@ public class View {
     public static void main(String[] args) {
         View view = new View();
         view.mainView();
+        System.out.println("客户端退出...");
     }
     private boolean loop = true;
     private String opt;
@@ -43,7 +44,7 @@ public class View {
         scanner.close();
     }
     public void secondView(){
-        while (true) {
+        while (loop) {
             System.out.println("\n==============欢迎用户" + userClientService.getU().getUid() + "================");
             System.out.println("\t\t 1.显示在线用户列表");
             System.out.println("\t\t 2.群发消息");
@@ -57,8 +58,10 @@ public class View {
             else if(opt2.equals("2")) System.out.println("群发消息");
             else if(opt2.equals("3")) System.out.println("私聊消息");
             else if(opt2.equals("4")) System.out.println("发送文件");
-            else if(opt2.equals("5")) {
+            else if(opt2.equals("9")) {
                 System.out.println("退出系统");
+                loop = false;
+                userClientService.userExit();
                 break;
             }
         }
