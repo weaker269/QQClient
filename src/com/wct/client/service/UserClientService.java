@@ -10,7 +10,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * @author WenCT
@@ -19,7 +22,6 @@ import java.util.List;
 public class UserClientService {
     private User u = new User();
     private Socket socket;
-
     public User getU() {
         return u;
     }
@@ -94,5 +96,44 @@ public class UserClientService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //用户向其他用户私聊消息
+    public void sendMessage(String receiver){
+        Message message = new Message();
+        message.setReceiver(receiver);
+        message.setSender(u.getUid());
+        message.setSendTime(UserClientService.getTime());
+        message.setMessageType(MessageType.MESSAGE_COMM_MES);
+        System.out.println("请输入你要发送的信息: ");
+        Scanner input = new Scanner(System.in);
+        String content = input.nextLine();
+        message.setContent(content);
+
+        try {
+            ClientConnectServerThread clientConnectServerThread =
+                    ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
+            Socket socket = clientConnectServerThread.getSocket();
+
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static String getTime(){
+        return (UserClientService.getStringDateShort() + " " + UserClientService.getTimeShort());
+    }
+    public static String getStringDateShort() {
+        Date currentTime = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateString = formatter.format(currentTime);
+        return dateString;
+    }
+    public static String getTimeShort() {
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+        Date currentTime = new Date();
+        String dateString = formatter.format(currentTime);
+        return dateString;
     }
 }

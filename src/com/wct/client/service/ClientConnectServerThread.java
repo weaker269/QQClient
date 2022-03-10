@@ -42,6 +42,10 @@ public class ClientConnectServerThread extends Thread{
                     socket.close();
                     break;
                 }
+                else if(message.getMessageType().equals(MessageType.MESSAGE_COMM_MES)){
+                    System.out.println(message.getReceiver() + "接收到" + message.getSender() + "的消息");
+                    System.out.println("消息是: " + message.getContent());
+                }
                 else{
 
                 }

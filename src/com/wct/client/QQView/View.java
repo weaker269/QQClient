@@ -56,7 +56,13 @@ public class View {
                 userClientService.onlineUserList();
             }
             else if(opt2.equals("2")) System.out.println("群发消息");
-            else if(opt2.equals("3")) System.out.println("私聊消息");
+            else if(opt2.equals("3")){
+                System.out.println("私聊消息");
+                System.out.println("请输入接收者uid: ");
+                Scanner input = new Scanner(System.in);
+                String receiver = input.next();
+                userClientService.sendMessage(receiver);
+            }
             else if(opt2.equals("4")) System.out.println("发送文件");
             else if(opt2.equals("9")) {
                 System.out.println("退出系统");
