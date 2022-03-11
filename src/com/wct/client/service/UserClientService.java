@@ -5,9 +5,7 @@ import com.wct.QQCommon.MessageType;
 import com.wct.QQCommon.User;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -146,6 +144,36 @@ public class UserClientService {
             }
         }
     }
+    public void sendFileData(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("请输入待发送文件路径:");
+        String path = scanner.nextLine();
+        System.out.println("请输入接收者uid:");
+        String receiver = scanner.next();
+        try {
+            File file = new File(path);
+            String name = file.getName();
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+            byte[] bytes = StreamUtils.streamToByteArray(bis);
+            Message message = new Message();
+            message.setSender(u.getUid());
+            message.setMessageType(MessageType.MESSAGE_FILE_MES);
+            message.setSendTime(UserClientService.getTime());
+            message.setReceiver(receiver);
+            message.setFileBytes(bytes);
+            message.setFileLen(bytes.length);
+            message.setFileName(name);
+            ClientConnectServerThread clientConnectServerThread =
+                    ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
+            Socket socket = clientConnectServerThread.getSocket();
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //获取时间方法
     public static String getTime(){
         return (UserClientService.getStringDateShort() + " " + UserClientService.getTimeShort());
     }

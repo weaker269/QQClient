@@ -3,9 +3,12 @@ package com.wct.client.service;
 import com.wct.QQCommon.Message;
 import com.wct.QQCommon.MessageType;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @author WenCT
@@ -48,6 +51,14 @@ public class ClientConnectServerThread extends Thread{
                 }
                 else if(message.getMessageType().equals(MessageType.MESSAGE_ERROR_RECEIVER_OFFLINE)){
                     System.out.println(message.getContent());
+                }
+                else if(message.getMessageType().equals(MessageType.MESSAGE_FILE_MES)){
+                    System.out.println(message.getSendTime()+ "  接收到来自 " + message.getSender() + " 的文件");
+                    String defaultPath = "E:/IDEAU_CODE/hsp_lesson/qqDefaultSaveDir/" + message.getFileName();//默认路径
+                    Scanner scanner = new Scanner(System.in);
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(defaultPath));
+                    bos.write(message.getFileBytes());
+                    System.out.println("文件已保存至: " + defaultPath);
                 }
                 else{
 
