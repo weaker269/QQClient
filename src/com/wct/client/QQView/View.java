@@ -55,7 +55,21 @@ public class View {
             if(opt2.equals("1")){
                 userClientService.onlineUserList();
             }
-            else if(opt2.equals("2")) System.out.println("群发消息");
+            else if(opt2.equals("2")){
+                System.out.println("群发消息");
+                System.out.println("请依次输入接收者id(输入-1以结束):");
+                Scanner input = new Scanner(System.in);
+                String receiver = "";
+                while(true){
+                    String s = input.next();
+                    if(s.equals("-1")) break;
+                    receiver += s+" ";
+                }
+                if(!receiver.isEmpty()){
+                    String[] strings = receiver.split(" ");
+                    userClientService.sendLotsMessage(strings);
+                }
+            }
             else if(opt2.equals("3")){
                 System.out.println("私聊消息");
                 System.out.println("请输入接收者uid: ");

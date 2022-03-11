@@ -43,8 +43,11 @@ public class ClientConnectServerThread extends Thread{
                     break;
                 }
                 else if(message.getMessageType().equals(MessageType.MESSAGE_COMM_MES)){
-                    System.out.println(message.getReceiver() + "接收到" + message.getSender() + "的消息");
+                    System.out.println(message.getSendTime()+ "  接收到来自 " + message.getSender() + " 的消息");
                     System.out.println("消息是: " + message.getContent());
+                }
+                else if(message.getMessageType().equals(MessageType.MESSAGE_ERROR_RECEIVER_OFFLINE)){
+                    System.out.println(message.getContent());
                 }
                 else{
 

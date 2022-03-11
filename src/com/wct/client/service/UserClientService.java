@@ -121,6 +121,31 @@ public class UserClientService {
             e.printStackTrace();
         }
     }
+
+    //群发消息
+    public void sendLotsMessage(String[] strings){
+        System.out.println("请输入你要发送的信息: ");
+        Scanner input = new Scanner(System.in);
+        String content = input.nextLine();
+        Message message = new Message();
+        message.setSender(u.getUid());
+        message.setSendTime(UserClientService.getTime());
+        message.setMessageType(MessageType.MESSAGE_COMM_MES);
+        message.setContent(content);
+        for(String s : strings){
+            message.setReceiver(s);
+            try {
+                ClientConnectServerThread clientConnectServerThread =
+                        ManageClientConnectServerThread.getClientConnectServerThread(u.getUid());
+                Socket socket = clientConnectServerThread.getSocket();
+
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.writeObject(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static String getTime(){
         return (UserClientService.getStringDateShort() + " " + UserClientService.getTimeShort());
     }
